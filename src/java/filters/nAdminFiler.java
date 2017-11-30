@@ -5,6 +5,7 @@
  */
 package filters;
 
+import businesslogic.UserService;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -21,9 +22,9 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author awarsyle
+ * @author 721292
  */
-public class AuthenticationFilter implements Filter {
+public class nAdminFiler implements Filter {
     
     private FilterConfig filterConfig = null;
     
@@ -36,18 +37,23 @@ public class AuthenticationFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
-        
-        // this code executes before the servlet
-        // ...
-        
+  
         // ensure user is authenticated
         HttpSession session = ((HttpServletRequest)request).getSession();
         if (session.getAttribute("username") != null) {
             // yes, go onwards to the servlet or next filter
-            chain.doFilter(request, response);
+            String username = (String) session.getAttribute("username");
+            UserService us = new UserService();
+            
+            try {
+                if(us.get(username).getRole().getRoleID() == 1)
+                    chain.doFilter(request, response);
+            } catch (Exception ex) {
+                ((HttpServletResponse)response).sendRedirect("login");
+            }
         } else {
             // get out of here!
-            ((HttpServletResponse)response).sendRedirect("login");
+            ((HttpServletResponse)response).sendRedirect("home");
         }
         
        // this code executes after the servlet

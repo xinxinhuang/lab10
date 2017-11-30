@@ -12,7 +12,7 @@
         <title>Login</title>
     </head>
     <body>
-        <h1>NotesKeepr Login</h1>
+        <h1>Notes.Keeper Login</h1>
         
         <form action="login" method="post">
             username: <input type="text" name="username"><br>
